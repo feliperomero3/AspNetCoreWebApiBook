@@ -13,6 +13,7 @@ public class BoardGameController : ControllerBase
         _logger = logger;
     }
 
+    [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
     public IEnumerable<BoardGame> GetBoardGames()
     {
         return new[]
