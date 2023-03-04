@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MyBoardGameList.Data.Configurations;
 
 namespace MyBoardGameList.Data;
 
@@ -12,6 +13,7 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // TODO: custom code here
+        modelBuilder
+            .ApplyConfiguration(new BoardGameEntityConfiguration());
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MyBoardGameList.Entities;
 using MyBoardGameList.Models;
 
 namespace MyBoardGameList.Controllers;
