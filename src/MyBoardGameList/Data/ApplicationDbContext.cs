@@ -14,6 +14,8 @@ public class ApplicationDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder
-            .ApplyConfiguration(new BoardGameEntityConfiguration());
+            .ApplyConfiguration(new BoardGameEntityConfiguration())
+            .ApplyConfiguration(new DomainEntityConfiguration())
+            .ApplyConfiguration(new MechanicEntityConfiguration());
     }
 }
