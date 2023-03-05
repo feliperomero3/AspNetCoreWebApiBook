@@ -29,4 +29,8 @@ public class BoardGame
     public DateTime CreatedDate { get; set; }
 
     public DateTime LastModifiedDate { get; set; }
+
+    public ICollection<BoardGameMechanic> BoardGameMechanics { get; set; } = new HashSet<BoardGameMechanic>();
+
+    public ICollection<BoardGameDomain> BoardGameDomains { get; set; } = new HashSet<BoardGameDomain>();
 }

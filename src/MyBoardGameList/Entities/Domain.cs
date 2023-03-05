@@ -9,4 +9,6 @@ public class Domain
     public DateTime CreatedDate { get; set; }
 
     public DateTime LastModifiedDate { get; set; }
+
+    public ICollection<BoardGameDomain> BoardGameDomains { get; set; } = new HashSet<BoardGameDomain>();
 }

@@ -9,4 +9,6 @@ public class Mechanic
     public DateTime CreatedDate { get; set; }
 
     public DateTime LastModifiedDate { get; set; }
+
+    public ICollection<BoardGameMechanic> BoardGameMechanics { get; set; } = new HashSet<BoardGameMechanic>();
 }
