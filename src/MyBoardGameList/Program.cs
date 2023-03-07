@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using MyBoardGameList.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -20,6 +23,9 @@ builder.Services.AddCors(options =>
             builder.AllowAnyMethod();
         });
 });
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
