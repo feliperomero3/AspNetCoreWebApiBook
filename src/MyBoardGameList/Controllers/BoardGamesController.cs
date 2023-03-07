@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using MyBoardGameList.Data;
 using MyBoardGameList.Entities;
 using MyBoardGameList.Models;
 
@@ -9,38 +11,19 @@ namespace MyBoardGameList.Controllers;
 public class BoardGamesController : ControllerBase
 {
     private readonly ILogger<BoardGamesController> _logger;
+    private readonly ApplicationDbContext _context;
 
-    public BoardGamesController(ILogger<BoardGamesController> logger)
+    public BoardGamesController(ILogger<BoardGamesController> logger, ApplicationDbContext context)
     {
-        _logger = logger;
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
     [HttpGet(Name = "GetBoardGames")]
     [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
-    public RestModel<BoardGame[]> GetBoardGames()
+    public async Task<RestModel<BoardGame[]>> GetBoardGames()
     {
-        var games = new[]
-        {
-            new BoardGame()
-            {
-                Id = 1,
-                Name = "Axis & Allies",
-                Year = 1981
-            },
-            new BoardGame()
-            {
-                Id = 2,
-                Name = "Citadels",
-                Year = 2000
-            },
-            new BoardGame()
-            {
-                Id = 3,
-
-                Name = "Terra-forming Mars",
-                Year = 2016
-            }
-        };
+        var games = await _context.BoardGames.AsNoTracking().ToArrayAsync();
 
         return new RestModel<BoardGame[]>
         {
