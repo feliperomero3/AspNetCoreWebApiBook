@@ -2,7 +2,7 @@
 using CsvHelper;
 using CsvHelper.Configuration;
 using MyBoardGameList.Entities;
-using MyBoardGameList.Models.Csv;
+using MyBoardGameList.Models;
 
 namespace MyBoardGameList.Data;
 
@@ -56,7 +56,7 @@ public class ApplicationDbContextInitializer
         while (csv.Read())
         {
             var now = DateTime.Now;
-            var record = csv.GetRecord<BggRecord>();
+            var record = csv.GetRecord<BggCsvRecord>();
 
             if (record == null || string.IsNullOrWhiteSpace(record.Name))
             {

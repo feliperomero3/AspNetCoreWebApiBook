@@ -1,8 +1,8 @@
 ﻿using CsvHelper.Configuration.Attributes;
 
-namespace MyBoardGameList.Models.Csv;
+namespace MyBoardGameList.Models;
 
-public class BggRecord
+public class BggCsvRecord
 {
     [Name("ID")]
     public int? ID { get; set; }
