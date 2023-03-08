@@ -120,6 +120,24 @@ public class ApplicationDbContextInitializer
 
         _context.SaveChanges();
 
+        foreach (var boardGameMechanic in boardGameMechanics)
+        {
+            var boardGame = _context.BoardGames.Local.FirstOrDefault(bg => bg.Name == boardGameMechanic.BoardGame!.Name);
+            var mechanic = _context.Mechanics.Local.FirstOrDefault(m => m.Name == boardGameMechanic.Mechanic!.Name);
+
+            _context.BoardGameMechanics.Add(new BoardGameMechanic { BoardGame = boardGame, Mechanic = mechanic });
+        }
+
+        foreach (var boardGameDomain in boardGameDomains)
+        {
+            var boardGame = _context.BoardGames.Local.FirstOrDefault(bg => bg.Name == boardGameDomain.BoardGame!.Name);
+            var domain = _context.Domains.Local.FirstOrDefault(d => d.Name == boardGameDomain.Domain!.Name);
+
+            _context.BoardGameDomains.Add(new BoardGameDomain { BoardGame = boardGame, Domain = domain });
+        }
+
+        _context.SaveChanges();
+
         _logger.LogInformation("Added {boardgames} board games.", boardGames.Count);
         _logger.LogInformation("Added {mechanics} mechanics.", mechanics.Count);
         _logger.LogInformation("Added {domains} domains.", domains.Count);

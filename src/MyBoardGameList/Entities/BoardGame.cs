@@ -30,7 +30,7 @@ public class BoardGame
 
     public DateTime LastModifiedDate { get; set; }
 
-    public ICollection<BoardGameMechanic> BoardGameMechanics { get; set; } = new HashSet<BoardGameMechanic>();
+    public ICollection<BoardGameMechanic> BoardGameMechanics { get; private set; } = new HashSet<BoardGameMechanic>();
 
-    public ICollection<BoardGameDomain> BoardGameDomains { get; set; } = new HashSet<BoardGameDomain>();
+    public ICollection<BoardGameDomain> BoardGameDomains { get; private set; } = new HashSet<BoardGameDomain>();
 }
