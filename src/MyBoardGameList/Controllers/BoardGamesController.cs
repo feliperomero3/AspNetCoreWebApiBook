@@ -27,6 +27,7 @@ public class BoardGamesController : ControllerBase
             .AsNoTracking()
             .Skip(pageIndex * pageSize)
             .Take(pageSize)
+            .OrderBy(g => g.Name)
             .ToArrayAsync();
 
         return new RestModel<BoardGame[]>

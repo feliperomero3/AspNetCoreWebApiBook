@@ -23,5 +23,6 @@ public class BoardGameEntityConfiguration : IEntityTypeConfiguration<BoardGame>
         builder.Property(p => p.OwnedUsers).IsRequired();
         builder.Property(p => p.CreatedDate).IsRequired();
         builder.Property(p => p.LastModifiedDate).IsRequired();
+        builder.HasIndex(p => p.Name);
     }
 }
