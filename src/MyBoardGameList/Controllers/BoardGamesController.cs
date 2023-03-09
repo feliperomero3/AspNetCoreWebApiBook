@@ -21,9 +21,13 @@ public class BoardGamesController : ControllerBase
 
     [HttpGet(Name = "GetBoardGames")]
     [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
-    public async Task<RestModel<BoardGame[]>> GetBoardGames()
+    public async Task<RestModel<BoardGame[]>> GetBoardGames(int pageIndex = 0, int pageSize = 10)
     {
-        var games = await _context.BoardGames.AsNoTracking().ToArrayAsync();
+        var games = await _context.BoardGames
+            .AsNoTracking()
+            .Skip(pageIndex * pageSize)
+            .Take(pageSize)
+            .ToArrayAsync();
 
         return new RestModel<BoardGame[]>
         {
@@ -32,11 +36,14 @@ public class BoardGamesController : ControllerBase
             {
                 new LinkModel
                 {
-                    Href = Url.Action("GetBoardGames", "BoardGames", null, Request.Scheme)!,
+                    Href = Url.Action("GetBoardGames", "BoardGames", new { pageIndex, pageSize }, Request.Scheme)!,
                     Rel = "Self",
                     Type = HttpMethod.Get.Method
                 }
-            }
+            },
+            PageIndex = pageIndex,
+            PageSize = pageSize,
+            TotalCount = await _context.BoardGames.CountAsync()
         };
     }
 }

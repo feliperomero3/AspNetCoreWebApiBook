@@ -141,7 +141,7 @@ public class ApplicationDbContextInitializer
         _logger.LogInformation("Added {boardgames} board games.", boardGames.Count);
         _logger.LogInformation("Added {mechanics} mechanics.", mechanics.Count);
         _logger.LogInformation("Added {domains} domains.", domains.Count);
-        _logger.LogInformation("Database has been seeded successfully.");
         _logger.LogInformation("Skipped {skippedRows} invalid row(s).", skippedRows);
+        _logger.LogInformation("Database has been seeded successfully.");
     }
 }
