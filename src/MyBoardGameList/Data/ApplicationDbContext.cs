@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using MyBoardGameList.Data.Configurations;
 using MyBoardGameList.Entities;
 
@@ -30,5 +31,35 @@ public class ApplicationDbContext : DbContext
             .ApplyConfiguration(new MechanicEntityConfiguration())
             .ApplyConfiguration(new BoardGameMechanicEntityConfiguration())
             .ApplyConfiguration(new BoardGameDomainEntityConfiguration());
+    }
+
+    public override int SaveChanges()
+    {
+        return SaveChangesAsync(CancellationToken.None).GetAwaiter().GetResult();
+    }
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        var modifiedEntities = ChangeTracker.Entries()
+            .Where(x => x.State == EntityState.Modified)
+            .Select(x => x.Entity);
+
+        foreach (var entity in modifiedEntities)
+        {
+            if (entity is BoardGame game)
+            {
+                game.UpdateLastModifiedDate(DateTime.Now);
+            }
+            else if (entity is Mechanic mechanic)
+            {
+                mechanic.UpdateLastModifiedDate(DateTime.Now);
+            }
+            else if (entity is Domain domain)
+            {
+                domain.UpdateLastModifiedDate(DateTime.Now);
+            }
+        }
+
+        return base.SaveChangesAsync(cancellationToken);
     }
 }

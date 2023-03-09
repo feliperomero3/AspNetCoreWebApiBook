@@ -21,7 +21,7 @@ public class BoardGamesController : ControllerBase
 
     [HttpGet(Name = "GetBoardGames")]
     [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
-    public async Task<RestModel<BoardGame[]>> GetBoardGames(int pageIndex = 0, int pageSize = 10, string? filterQuery = null)
+    public async Task<PagedRestModel<BoardGame[]>> GetBoardGames(int pageIndex = 0, int pageSize = 10, string? filterQuery = null)
     {
         var query = _context.BoardGames.AsNoTracking();
         var totalCount = query.Count();
@@ -36,7 +36,7 @@ public class BoardGamesController : ControllerBase
             .Take(pageSize)
             .ToArrayAsync();
 
-        return new RestModel<BoardGame[]>
+        return new PagedRestModel<BoardGame[]>
         {
             Data = games,
             Links = new[]
@@ -52,5 +52,38 @@ public class BoardGamesController : ControllerBase
             PageSize = pageSize,
             TotalCount = totalCount
         };
+    }
+
+    [HttpPost("{id}", Name = "UpdateBoardGame")]
+    [ResponseCache(NoStore = true)]
+    public async Task<ActionResult<RestModel<BoardGame>>> UpdateBoardGame(int id, InputBoardGameModel boardGameModel)
+    {
+        var boardGame = await _context.BoardGames.FindAsync(id);
+
+        if (boardGame == null)
+        {
+            ModelState.AddModelError(string.Empty, "Board game specified doesn't exist.");
+            return UnprocessableEntity(ModelState);
+        }
+
+        _context.Entry(boardGame).CurrentValues.SetValues(boardGameModel);
+
+        await _context.SaveChangesAsync();
+
+        var result = new RestModel<BoardGame[]>
+        {
+            Data = new[] { boardGame },
+            Links = new[]
+            {
+                new LinkModel
+                {
+                    Href = Url.Action("UpdateBoardGame", "BoardGames", new { id }, Request.Scheme)!,
+                    Rel = "Self",
+                    Type = Request.Method
+                }
+            }
+        };
+
+        return Ok(result);
     }
 }

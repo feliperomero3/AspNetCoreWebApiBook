@@ -33,4 +33,9 @@ public class BoardGame
     public ICollection<BoardGameMechanic> BoardGameMechanics { get; private set; } = new HashSet<BoardGameMechanic>();
 
     public ICollection<BoardGameDomain> BoardGameDomains { get; private set; } = new HashSet<BoardGameDomain>();
+
+    internal void UpdateLastModifiedDate(DateTime now)
+    {
+        LastModifiedDate = now;
+    }
 }

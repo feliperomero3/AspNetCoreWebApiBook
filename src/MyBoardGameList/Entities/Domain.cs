@@ -38,4 +38,9 @@ public class Domain
     {
         return (GetType().ToString() + Name).GetHashCode();
     }
+
+    internal void UpdateLastModifiedDate(DateTime now)
+    {
+        LastModifiedDate = now;
+    }
 }
