@@ -21,13 +21,19 @@ public class BoardGamesController : ControllerBase
 
     [HttpGet(Name = "GetBoardGames")]
     [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
-    public async Task<RestModel<BoardGame[]>> GetBoardGames(int pageIndex = 0, int pageSize = 10)
+    public async Task<RestModel<BoardGame[]>> GetBoardGames(int pageIndex = 0, int pageSize = 10, string? filterQuery = null)
     {
-        var games = await _context.BoardGames
-            .AsNoTracking()
+        var query = _context.BoardGames.AsNoTracking();
+        var totalCount = query.Count();
+
+        if (!string.IsNullOrEmpty(filterQuery))
+        {
+            query = query.Where(b => b.Name.Contains(filterQuery));
+        }
+
+        var games = await query.OrderBy(g => g.Name)
             .Skip(pageIndex * pageSize)
             .Take(pageSize)
-            .OrderBy(g => g.Name)
             .ToArrayAsync();
 
         return new RestModel<BoardGame[]>
@@ -44,7 +50,7 @@ public class BoardGamesController : ControllerBase
             },
             PageIndex = pageIndex,
             PageSize = pageSize,
-            TotalCount = await _context.BoardGames.CountAsync()
+            TotalCount = totalCount
         };
     }
 }
