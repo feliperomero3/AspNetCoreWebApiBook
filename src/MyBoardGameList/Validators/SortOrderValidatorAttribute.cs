@@ -8,7 +8,7 @@ namespace MyBoardGameList.Validators;
 /// </summary>
 public class SortOrderValidatorAttribute : ValidationAttribute
 {
-    private readonly string[] _allowedValues = new[] { "ASC", "DESC" };
+    public readonly string[] AllowedValues = new[] { "ASC", "DESC" };
     private const string _defaultErrorMessage = "Value must be one of the following: {0}.";
 
     public SortOrderValidatorAttribute() : base(_defaultErrorMessage) { }
@@ -17,11 +17,11 @@ public class SortOrderValidatorAttribute : ValidationAttribute
     {
         var strValue = value as string;
 
-        if (!string.IsNullOrEmpty(strValue) && _allowedValues.Contains(strValue))
+        if (!string.IsNullOrEmpty(strValue) && AllowedValues.Contains(strValue))
         {
             return ValidationResult.Success;
         }
 
-        return new ValidationResult(FormatErrorMessage(string.Join(",", _allowedValues)));
+        return new ValidationResult(FormatErrorMessage(string.Join("|", AllowedValues)));
     }
 }

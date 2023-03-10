@@ -1,11 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using MyBoardGameList.Data;
+using MyBoardGameList.OpenAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options => options.ParameterFilter<SortOrderFilter>());
 
 builder.Services.AddCors(options =>
 {

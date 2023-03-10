@@ -24,7 +24,7 @@ public class BoardGamesController : ControllerBase
     [HttpGet(Name = "GetBoardGames")]
     [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
     public async Task<PagedRestModel<BoardGame[]>> GetBoardGames(
-        [MaxLength(int.MaxValue)] int pageIndex = 0,
+        [Range(0, int.MaxValue)] int pageIndex = 0,
         [Range(1, 100)] int pageSize = 10,
         [SortOrderValidator] string? sortOrder = "ASC",
         [StringLength(64)] string? filterQuery = null)
