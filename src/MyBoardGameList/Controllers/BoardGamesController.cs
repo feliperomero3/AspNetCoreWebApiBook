@@ -1,10 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyBoardGameList.Data;
 using MyBoardGameList.Entities;
 using MyBoardGameList.Models;
-using MyBoardGameList.Validators;
 
 namespace MyBoardGameList.Controllers;
 
@@ -23,23 +21,19 @@ public class BoardGamesController : ControllerBase
 
     [HttpGet(Name = "GetBoardGames")]
     [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
-    public async Task<PagedRestModel<BoardGame[]>> GetBoardGames(
-        [Range(0, int.MaxValue)] int pageIndex = 0,
-        [Range(1, 100)] int pageSize = 10,
-        [SortOrderValidator] string? sortOrder = "ASC",
-        [StringLength(64)] string? filterQuery = null)
+    public async Task<PagedRestModel<BoardGame[]>> GetBoardGames([FromQuery] RequestModel model)
     {
         var query = _context.BoardGames.AsNoTracking();
         var totalCount = query.Count();
 
-        if (!string.IsNullOrEmpty(filterQuery))
+        if (!string.IsNullOrEmpty(model.FilterQuery))
         {
-            query = query.Where(b => b.Name.Contains(filterQuery));
+            query = query.Where(b => b.Name.Contains(model.FilterQuery));
         }
 
-        query = sortOrder == "ASC" ? query.OrderBy(g => g.Name) : query.OrderByDescending(g => g.Name);
+        query = model.SortOrder == "ASC" ? query.OrderBy(g => g.Name) : query.OrderByDescending(g => g.Name);
 
-        var games = await query.Skip(pageIndex * pageSize).Take(pageSize).ToArrayAsync();
+        var games = await query.Skip(model.PageIndex * model.PageSize).Take(model.PageSize).ToArrayAsync();
 
         return new PagedRestModel<BoardGame[]>
         {
@@ -48,13 +42,13 @@ public class BoardGamesController : ControllerBase
             {
                 new LinkModel
                 {
-                    Href = Url.Action("GetBoardGames", "BoardGames", new { pageIndex, pageSize }, Request.Scheme)!,
+                    Href = Url.Action("GetBoardGames", "BoardGames", new { model.PageIndex, model.PageSize }, Request.Scheme)!,
                     Rel = "Self",
                     Type = HttpMethod.Get.Method
                 }
             },
-            PageIndex = pageIndex,
-            PageSize = pageSize,
+            PageIndex = model.PageIndex,
+            PageSize = model.PageSize,
             TotalCount = totalCount
         };
     }
