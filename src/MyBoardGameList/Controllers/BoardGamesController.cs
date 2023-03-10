@@ -86,4 +86,22 @@ public class BoardGamesController : ControllerBase
 
         return Ok(result);
     }
+
+    [HttpDelete("{id}", Name = "DeleteBoardGame")]
+    [ResponseCache(NoStore = true)]
+    public async Task<ActionResult> DeleteGame(int id)
+    {
+        var boardgame = await _context.BoardGames.FindAsync(id);
+
+        if (boardgame == null)
+        {
+            return NoContent();
+        }
+
+        _context.BoardGames.Remove(boardgame);
+
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
 }
