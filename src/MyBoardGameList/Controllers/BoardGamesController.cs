@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyBoardGameList.Data;
 using MyBoardGameList.Entities;
 using MyBoardGameList.Models;
+using MyBoardGameList.Validators;
 
 namespace MyBoardGameList.Controllers;
 
@@ -21,7 +23,11 @@ public class BoardGamesController : ControllerBase
 
     [HttpGet(Name = "GetBoardGames")]
     [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
-    public async Task<PagedRestModel<BoardGame[]>> GetBoardGames(int pageIndex = 0, int pageSize = 10, string? filterQuery = null)
+    public async Task<PagedRestModel<BoardGame[]>> GetBoardGames(
+        [MaxLength(int.MaxValue)] int pageIndex = 0,
+        [Range(1, 100)] int pageSize = 10,
+        [SortOrderValidator] string? sortOrder = "ASC",
+        [StringLength(64)] string? filterQuery = null)
     {
         var query = _context.BoardGames.AsNoTracking();
         var totalCount = query.Count();
@@ -31,10 +37,9 @@ public class BoardGamesController : ControllerBase
             query = query.Where(b => b.Name.Contains(filterQuery));
         }
 
-        var games = await query.OrderBy(g => g.Name)
-            .Skip(pageIndex * pageSize)
-            .Take(pageSize)
-            .ToArrayAsync();
+        query = sortOrder == "ASC" ? query.OrderBy(g => g.Name) : query.OrderByDescending(g => g.Name);
+
+        var games = await query.Skip(pageIndex * pageSize).Take(pageSize).ToArrayAsync();
 
         return new PagedRestModel<BoardGame[]>
         {
