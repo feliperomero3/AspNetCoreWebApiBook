@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyBoardGameList.Data;
+using MyBoardGameList.Filters;
 using MyBoardGameList.Models;
 
 namespace MyBoardGameList.Controllers;
@@ -18,6 +19,7 @@ public class DomainsController : ControllerBase
 
     [HttpGet(Name = "GetDomains")]
     [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
+    [ManualValidationFilter]
     public async Task<ActionResult<PagedRestModel<DomainModel[]>>> GetDomains([FromQuery] RequestModel model)
     {
         if (!ModelState.IsValid)
