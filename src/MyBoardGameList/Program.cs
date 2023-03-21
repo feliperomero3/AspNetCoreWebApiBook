@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyBoardGameList.Data;
 using MyBoardGameList.OpenAPI;
@@ -17,6 +18,7 @@ builder.Services.AddControllers(options =>
 });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options => options.ParameterFilter<SortOrderFilter>());
+builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
 
 builder.Services.AddCors(options =>
 {
