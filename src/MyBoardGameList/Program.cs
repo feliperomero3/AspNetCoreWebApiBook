@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyBoardGameList.Data;
 using MyBoardGameList.OpenAPI;
@@ -55,7 +57,25 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseExceptionHandler("/error");
+    app.UseExceptionHandler(action =>
+    {
+        action.Run(async context =>
+        {
+            var exceptionHandler = context.Features.Get<IExceptionHandlerPathFeature>();
+
+            var details = new ProblemDetails
+            {
+                Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1",
+                Status = StatusCodes.Status500InternalServerError,
+                Title = "An error occurred while processing your request.",
+                Detail = exceptionHandler?.Error.Message,
+            };
+
+            details.Extensions["traceId"] = System.Diagnostics.Activity.Current?.Id ?? context.TraceIdentifier;
+
+            await context.Response.WriteAsync(System.Text.Json.JsonSerializer.Serialize(details));
+        });
+    });
 }
 
 app.UseHttpsRedirection();
