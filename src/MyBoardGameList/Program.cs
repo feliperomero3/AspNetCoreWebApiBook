@@ -17,7 +17,6 @@ builder.Services.AddControllers(options =>
     options.ModelBindingMessageProvider.SetMissingKeyOrValueAccessor(
         () => $"A value is required.");
 });
-builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options => options.ParameterFilter<SortOrderFilter>());
 
