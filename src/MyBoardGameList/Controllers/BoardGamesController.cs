@@ -23,6 +23,8 @@ public class BoardGamesController : ControllerBase
     [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
     public async Task<PagedRestModel<BoardGame[]>> GetBoardGames([FromQuery] RequestModel model)
     {
+        _logger.LogInformation("GetBoardGames method started.");
+
         var query = _context.BoardGames.AsNoTracking();
         var totalCount = query.Count();
 
