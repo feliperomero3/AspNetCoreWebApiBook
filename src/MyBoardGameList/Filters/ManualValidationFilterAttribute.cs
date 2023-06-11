@@ -10,6 +10,7 @@ namespace MyBoardGameList.Filters;
 /// <remarks>
 /// Can be used to conditionally disable the API Controller ModelState auto-validation feature.
 /// </remarks>
+[AttributeUsage(AttributeTargets.Method)]
 public class ManualValidationFilterAttribute : Attribute, IActionModelConvention
 {
     public void Apply(ActionModel action)
