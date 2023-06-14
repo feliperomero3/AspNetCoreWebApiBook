@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Net.Http.Headers;
 using MyBoardGameList.Data;
 using MyBoardGameList.OpenAPI;
 
@@ -85,7 +86,15 @@ app.UseAuthorization();
 
 app.Use((context, next) =>
 {
-    context.Response.Headers["cache-control"] = "no-cache, no-store";
+    context.Response.GetTypedHeaders().CacheControl =
+        new CacheControlHeaderValue
+        {
+            NoCache = true,
+            NoStore = true,
+            MustRevalidate = true,
+            Private = true,
+            MaxAge = TimeSpan.FromSeconds(0)
+        };
 
     return next();
 });

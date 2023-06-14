@@ -9,7 +9,6 @@ public class ErrorController : ControllerBase
 {
     [ApiExplorerSettings(IgnoreApi = true)]
     [EnableCors("AnyOrigin")]
-    [ResponseCache(NoStore = true)]
     [Route("test")]
     public ActionResult GetTestError()
     {

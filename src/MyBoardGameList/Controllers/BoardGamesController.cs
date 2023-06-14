@@ -56,7 +56,6 @@ public class BoardGamesController : ControllerBase
     }
 
     [HttpPost("{id}", Name = "UpdateBoardGame")]
-    [ResponseCache(NoStore = true)]
     public async Task<ActionResult<RestModel<BoardGame>>> UpdateBoardGame(int id, InputBoardGameModel boardGameModel)
     {
         var boardGame = await _context.BoardGames.FindAsync(id);
@@ -89,7 +88,6 @@ public class BoardGamesController : ControllerBase
     }
 
     [HttpDelete("{id}", Name = "DeleteBoardGame")]
-    [ResponseCache(NoStore = true)]
     public async Task<ActionResult> DeleteGame(int id)
     {
         var boardgame = await _context.BoardGames.FindAsync(id);

@@ -6,6 +6,7 @@ using MyBoardGameList.Filters;
 using MyBoardGameList.Models;
 
 namespace MyBoardGameList.Controllers;
+
 [Route("domains")]
 [ApiController]
 public class DomainsController : ControllerBase
