@@ -53,6 +53,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddScoped<ApplicationDbContextInitializer>();
 
+builder.Services.AddResponseCaching(options =>
+{
+    options.MaximumBodySize = 16 * 1024 * 1024;
+    options.SizeLimit = 32 * 1024 * 1024;
+});
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -108,6 +114,8 @@ app.Use((context, next) =>
 
     return next();
 });
+
+app.UseResponseCaching();
 
 app.MapControllers();
 
