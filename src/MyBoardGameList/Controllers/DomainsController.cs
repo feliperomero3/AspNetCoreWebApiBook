@@ -19,7 +19,7 @@ public class DomainsController : ControllerBase
     }
 
     [HttpGet(Name = "GetDomains")]
-    [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
+    [ResponseCache(CacheProfileName = "Any-60")]
     [ManualValidationFilter]
     public async Task<ActionResult<PagedRestModel<DomainModel[]>>> GetDomains([FromQuery] RequestModel model)
     {

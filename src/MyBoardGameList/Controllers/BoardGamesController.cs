@@ -20,7 +20,7 @@ public class BoardGamesController : ControllerBase
     }
 
     [HttpGet(Name = "GetBoardGames")]
-    [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
+    [ResponseCache(CacheProfileName = "Any-60")]
     public async Task<PagedRestModel<BoardGame[]>> GetBoardGames([FromQuery] RequestModel model)
     {
         _logger.LogInformation("GetBoardGames method started.");
@@ -56,6 +56,7 @@ public class BoardGamesController : ControllerBase
     }
 
     [HttpPost("{id}", Name = "UpdateBoardGame")]
+    [ResponseCache(CacheProfileName = "NoCache")]
     public async Task<ActionResult<RestModel<BoardGame>>> UpdateBoardGame(int id, InputBoardGameModel boardGameModel)
     {
         var boardGame = await _context.BoardGames.FindAsync(id);
@@ -88,6 +89,7 @@ public class BoardGamesController : ControllerBase
     }
 
     [HttpDelete("{id}", Name = "DeleteBoardGame")]
+    [ResponseCache(CacheProfileName = "NoCache")]
     public async Task<ActionResult> DeleteGame(int id)
     {
         var boardgame = await _context.BoardGames.FindAsync(id);
