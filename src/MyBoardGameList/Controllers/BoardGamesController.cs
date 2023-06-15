@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using MyBoardGameList.Data;
@@ -28,8 +29,12 @@ public class BoardGamesController : ControllerBase
     {
         _logger.LogInformation("GetBoardGames method started.");
 
+        var cacheKey = $"{model.GetType()}-{JsonSerializer.Serialize(model)}";
+
+        _cache.TryGetValue(cacheKey, out BoardGame[]? cachedGames);
+
         var query = _context.BoardGames.AsNoTracking();
-        var totalCount = query.Count();
+        var totalCount = await query.CountAsync();
 
         if (!string.IsNullOrEmpty(model.FilterQuery))
         {
@@ -38,7 +43,12 @@ public class BoardGamesController : ControllerBase
 
         query = model.SortOrder == "ASC" ? query.OrderBy(g => g.Name) : query.OrderByDescending(g => g.Name);
 
-        var games = await query.Skip(model.PageIndex * model.PageSize).Take(model.PageSize).ToArrayAsync();
+        var games = cachedGames ?? await query.Skip(model.PageIndex * model.PageSize).Take(model.PageSize).ToArrayAsync();
+
+        if (cachedGames == null)
+        {
+            _cache.Set(cacheKey, games, TimeSpan.FromSeconds(120));
+        }
 
         return new PagedRestModel<BoardGame[]>
         {
