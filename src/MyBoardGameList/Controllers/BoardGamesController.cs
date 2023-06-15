@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using MyBoardGameList.Data;
 using MyBoardGameList.Entities;
 using MyBoardGameList.Models;
@@ -12,11 +13,13 @@ public class BoardGamesController : ControllerBase
 {
     private readonly ILogger<BoardGamesController> _logger;
     private readonly ApplicationDbContext _context;
+    private readonly IMemoryCache _cache;
 
-    public BoardGamesController(ILogger<BoardGamesController> logger, ApplicationDbContext context)
+    public BoardGamesController(ILogger<BoardGamesController> logger, ApplicationDbContext context, IMemoryCache cache)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _context = context ?? throw new ArgumentNullException(nameof(context));
+        _cache = cache ?? throw new ArgumentNullException(nameof(cache));
     }
 
     [HttpGet(Name = "GetBoardGames")]
