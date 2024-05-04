@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using System.Text.Json;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,23 +12,25 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers(options =>
 {
     options.ModelBindingMessageProvider.SetValueIsInvalidAccessor(
-        (x) => $"The value '{x}' is invalid.");
+        x => $"The value '{x}' is invalid.");
     options.ModelBindingMessageProvider.SetValueMustBeANumberAccessor(
-        (x) => $"The field {x} must be a number.");
+        x => $"The field {x} must be a number.");
     options.ModelBindingMessageProvider.SetAttemptedValueIsInvalidAccessor(
         (x, y) => $"The value '{x}' is not valid for {y}.");
     options.ModelBindingMessageProvider.SetMissingKeyOrValueAccessor(
-        () => $"A value is required.");
+        () => "A value is required.");
 
-    options.CacheProfiles.Add("NoCache", new CacheProfile
-    {
-        NoStore = true
-    });
-    options.CacheProfiles.Add("Any-60", new CacheProfile
-    {
-        Location = ResponseCacheLocation.Any,
-        Duration = 60
-    });
+    options.CacheProfiles.Add("NoCache",
+        new CacheProfile
+        {
+            NoStore = true
+        });
+    options.CacheProfiles.Add("Any-60",
+        new CacheProfile
+        {
+            Location = ResponseCacheLocation.Any,
+            Duration = 60
+        });
 });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options => options.ParameterFilter<SortOrderFilter>());
@@ -39,7 +43,7 @@ builder.Services.AddCors(options =>
         builder.AllowAnyHeader();
         builder.AllowAnyMethod();
     });
-    options.AddPolicy(name: "AnyOrigin",
+    options.AddPolicy("AnyOrigin",
         builder =>
         {
             builder.AllowAnyOrigin();
@@ -86,12 +90,12 @@ else
                 Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1",
                 Status = StatusCodes.Status500InternalServerError,
                 Title = "An error occurred while processing your request.",
-                Detail = exceptionHandler?.Error.Message,
+                Detail = exceptionHandler?.Error.Message
             };
 
-            details.Extensions["traceId"] = System.Diagnostics.Activity.Current?.Id ?? context.TraceIdentifier;
+            details.Extensions["traceId"] = Activity.Current?.Id ?? context.TraceIdentifier;
 
-            await context.Response.WriteAsync(System.Text.Json.JsonSerializer.Serialize(details));
+            await context.Response.WriteAsync(JsonSerializer.Serialize(details));
         });
     });
 }
