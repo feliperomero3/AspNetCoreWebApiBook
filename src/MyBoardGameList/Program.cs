@@ -90,10 +90,12 @@ else
                 Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1",
                 Status = StatusCodes.Status500InternalServerError,
                 Title = "An error occurred while processing your request.",
-                Detail = exceptionHandler?.Error.Message
+                Detail = exceptionHandler?.Error.Message,
+                Extensions =
+                {
+                    ["traceId"] = Activity.Current?.Id ?? context.TraceIdentifier
+                }
             };
-
-            details.Extensions["traceId"] = Activity.Current?.Id ?? context.TraceIdentifier;
 
             await context.Response.WriteAsync(JsonSerializer.Serialize(details));
         });
