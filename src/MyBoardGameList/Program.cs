@@ -14,22 +14,7 @@ builder.Services.AddControllers(MvcBuilderExtensions.ConfigureMvcAction);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options => options.ParameterFilter<SortOrderFilter>());
 
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(builder =>
-    {
-        builder.WithOrigins("*");
-        builder.AllowAnyHeader();
-        builder.AllowAnyMethod();
-    });
-    options.AddPolicy("AnyOrigin",
-        builder =>
-        {
-            builder.AllowAnyOrigin();
-            builder.AllowAnyHeader();
-            builder.AllowAnyMethod();
-        });
-});
+builder.Services.AddCors(ServiceCollectionExtensions.ConfigureCorsAction);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
