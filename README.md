@@ -13,6 +13,9 @@ Based on the Web Application built in the Book 'Building Web APIs with ASP.NET C
 1. Build the solution.
 1. Press F5 to launch the project in debug mode.
 
+**Note:** The first time you launch the project the database `MyBoardGameList` will be created and seeded with data from the `bgg_dataset_test.csv` file. 
+The database is created automatically using EF Core's `Database.EnsureCreated()`.
+
 ## License
 
 	MIT License
