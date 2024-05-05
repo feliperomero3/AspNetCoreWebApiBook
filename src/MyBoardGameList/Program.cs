@@ -19,7 +19,7 @@ builder.Services.AddScoped<ApplicationDbContextInitializer>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(ServiceCollectionExtensions.ConfigureAuthorization);
 
 builder.Services.AddResponseCaching(options =>
 {

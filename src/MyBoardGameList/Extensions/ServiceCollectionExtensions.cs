@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.OpenApi.Models;
 using MyBoardGameList.OpenAPI;
@@ -53,5 +54,12 @@ public static class ServiceCollectionExtensions
         });
 
         options.ParameterFilter<SortOrderFilter>();
+    }
+
+    public static void ConfigureAuthorization(this AuthorizationOptions options)
+    {
+        options.FallbackPolicy = new AuthorizationPolicyBuilder()
+            .RequireAuthenticatedUser()
+            .Build();
     }
 }
