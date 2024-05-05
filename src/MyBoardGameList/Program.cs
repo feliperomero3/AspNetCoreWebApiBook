@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Net.Http.Headers;
 using MyBoardGameList.Data;
 using MyBoardGameList.Extensions;
 
@@ -47,21 +46,6 @@ app.UseHttpsRedirection();
 app.UseCors();
 
 app.UseAuthorization();
-
-app.Use((context, next) =>
-{
-    context.Response.GetTypedHeaders().CacheControl =
-        new CacheControlHeaderValue
-        {
-            NoCache = true,
-            NoStore = true,
-            MustRevalidate = true,
-            Private = true,
-            MaxAge = TimeSpan.FromSeconds(0)
-        };
-
-    return next();
-});
 
 app.UseResponseCaching();
 
