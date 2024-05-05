@@ -37,6 +37,21 @@ public static class ServiceCollectionExtensions
             Scheme = JwtBearerDefaults.AuthenticationScheme
         });
 
+        options.AddSecurityRequirement(new OpenApiSecurityRequirement
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = JwtBearerDefaults.AuthenticationScheme
+                    }
+                },
+                Array.Empty<string>()
+            }
+        });
+
         options.ParameterFilter<SortOrderFilter>();
     }
 }
