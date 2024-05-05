@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Cors.Infrastructure;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.OpenApi.Models;
 using MyBoardGameList.OpenAPI;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -23,5 +25,18 @@ public static class ServiceCollectionExtensions
             });
     }
 
-    public static void ConfigureSwaggerAction(SwaggerGenOptions options) => options.ParameterFilter<SortOrderFilter>();
+    public static void ConfigureSwaggerAction(SwaggerGenOptions options)
+    {
+        options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
+        {
+            In = ParameterLocation.Header,
+            Description = "Please enter the JWT",
+            Name = "Authorization",
+            Type = SecuritySchemeType.Http,
+            BearerFormat = "JWT",
+            Scheme = JwtBearerDefaults.AuthenticationScheme
+        });
+
+        options.ParameterFilter<SortOrderFilter>();
+    }
 }
