@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
 using MyBoardGameList.Data;
 using MyBoardGameList.Extensions;
-using MyBoardGameList.OpenAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers(MvcBuilderExtensions.ConfigureMvcAction);
+
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options => options.ParameterFilter<SortOrderFilter>());
+builder.Services.AddSwaggerGen(ServiceCollectionExtensions.ConfigureSwaggerAction);
 
 builder.Services.AddCors(ServiceCollectionExtensions.ConfigureCorsAction);
 

@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Cors.Infrastructure;
+using MyBoardGameList.OpenAPI;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace MyBoardGameList.Extensions;
 
@@ -20,4 +22,6 @@ public static class ServiceCollectionExtensions
                 builder.AllowAnyMethod();
             });
     }
+
+    public static void ConfigureSwaggerAction(SwaggerGenOptions options) => options.ParameterFilter<SortOrderFilter>();
 }
