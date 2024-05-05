@@ -1,7 +1,7 @@
 ﻿namespace MyBoardGameList.Constants;
 
-public class RoleNames
+public static class RoleNames
 {
-    public static readonly string Administrator = "Administrator";
-    public static readonly string Moderator = "Moderator";
+    public const string Administrator = "Administrator";
+    public const string Moderator = "Moderator";
 }

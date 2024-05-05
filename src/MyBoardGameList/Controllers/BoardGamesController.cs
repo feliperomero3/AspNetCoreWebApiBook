@@ -1,7 +1,9 @@
 ﻿using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using MyBoardGameList.Constants;
 using MyBoardGameList.Data;
 using MyBoardGameList.Entities;
 using MyBoardGameList.Models;
@@ -70,6 +72,7 @@ public class BoardGamesController : ControllerBase
 
     [HttpPost("{id}", Name = "UpdateBoardGame")]
     [ResponseCache(CacheProfileName = "NoCache")]
+    [Authorize(Roles = RoleNames.Moderator)]
     public async Task<ActionResult<RestModel<BoardGame>>> UpdateBoardGame(int id, InputBoardGameModel boardGameModel)
     {
         var boardGame = await _context.BoardGames.FindAsync(id);
@@ -103,6 +106,7 @@ public class BoardGamesController : ControllerBase
 
     [HttpDelete("{id}", Name = "DeleteBoardGame")]
     [ResponseCache(CacheProfileName = "NoCache")]
+    [Authorize(Roles = RoleNames.Administrator)]
     public async Task<ActionResult> DeleteGame(int id)
     {
         var boardgame = await _context.BoardGames.FindAsync(id);

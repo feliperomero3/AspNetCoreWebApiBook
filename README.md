@@ -15,7 +15,7 @@ Based on the Web Application built in the Book 'Building Web APIs with ASP.NET C
 1. Press F5 to launch the project in debug mode.
 1. Open a terminal at the root of the repository.
 1. Change to the `src\MyBoardGameList` directory.
-1. Execute `dotnet user-jwts create` to create a bearer token.
+1. Execute `dotnet user-jwts create --role Administrator` to create a bearer token.
 1. Use the bearer token to authenticate requests to the API.
 
 **Note:** The first time you launch the project the database `MyBoardGameList` will be created and seeded with data from the `bgg_dataset_test.csv` file. 
