@@ -7,7 +7,7 @@ namespace MyBoardGameList.Extensions;
 
 public static class ApplicationBuilderExtensions
 {
-    public static void ConfigureExceptionHandler(this IApplicationBuilder builder)
+    private static void ConfigureExceptionHandler(this IApplicationBuilder builder)
     {
         builder.Run(async context =>
         {
@@ -28,4 +28,7 @@ public static class ApplicationBuilderExtensions
             await context.Response.WriteAsync(JsonSerializer.Serialize(details));
         });
     }
+
+    public static IApplicationBuilder UseApplicationExceptionHandler(this IApplicationBuilder builder) =>
+        builder.UseExceptionHandler(ConfigureExceptionHandler);
 }

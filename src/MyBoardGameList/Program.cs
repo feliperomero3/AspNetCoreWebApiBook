@@ -43,7 +43,7 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseExceptionHandler(MyBoardGameList.Extensions.ApplicationBuilderExtensions.ConfigureExceptionHandler);
+    app.UseApplicationExceptionHandler();
 }
 
 app.UseHttpsRedirection();
