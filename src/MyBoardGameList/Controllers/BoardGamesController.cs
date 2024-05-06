@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Linq.Expressions;
+using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -109,16 +110,14 @@ public class BoardGamesController : ControllerBase
     [Authorize(Roles = RoleNames.Administrator)]
     public async Task<ActionResult> DeleteGame(int id)
     {
-        var boardgame = await _context.BoardGames.FindAsync(id);
+        Expression<Func<BoardGame, bool>> query = b => b.Id == id;
 
-        if (boardgame == null)
+        if (!await _context.BoardGames.AnyAsync(query))
         {
             return NoContent();
         }
 
-        _context.BoardGames.Remove(boardgame);
-
-        await _context.SaveChangesAsync();
+        await _context.BoardGames.Where(query).ExecuteDeleteAsync();
 
         return NoContent();
     }
